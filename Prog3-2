@@ -1,0 +1,81 @@
+.data
+prompt: .asciiz "Enter an integer n: "
+result: .asciiz "The result a_n is: "
+first_name: .asciiz "Jaykwonn "
+last_name: .asciiz "James "
+pid_label: .asciiz "PID: "
+newline: .asciiz "\n"
+pid: .word ******
+
+.text
+.globl main
+
+main:
+    # Print first name
+    li $v0, 4
+    la $a0, first_name
+    syscall
+
+    # Print last name
+    li $v0, 4
+    la $a0, last_name
+    syscall
+
+    # Print PID label
+    li $v0, 4
+    la $a0, pid_label
+    syscall
+
+    # Print PID (as an integer)
+    li $v0, 1
+    lw $a0, pid    # Load PID from memory
+    syscall
+
+    # Print newline
+    li $v0, 4
+    la $a0, newline
+    syscall
+
+    # Print prompt
+    li $v0, 4
+    la $a0, prompt
+    syscall
+
+    # Read integer n
+    li $v0, 5
+    syscall
+    move $t0, $v0  # $t0 = n
+
+    # Initialize a_0 = 0
+    li $t1, 0      # $t1 = a_n (current a value)
+    li $t2, 1      # $t2 = counter (i)
+
+loop:
+    # Check if counter > n
+    bgt $t2, $t0, end_loop
+
+    # Calculate a_n = a_(n-1) + 2*i - 1
+    add $t3, $t2, $t2  # $t3 = 2*i
+    sub $t3, $t3, 1    # $t3 = 2*i - 1
+    add $t1, $t1, $t3  # $t1 = a_n
+
+    # Increment counter
+    addi $t2, $t2, 1
+
+    # Repeat loop
+    j loop
+
+end_loop:
+    # Print result
+    li $v0, 4
+    la $a0, result
+    syscall
+
+    # Print a_n
+    li $v0, 1
+    move $a0, $t1
+    syscall
+
+    # Exit program
+    li $v0, 10
+    syscall
