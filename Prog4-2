@@ -1,0 +1,79 @@
+#include <stdio.h>
+#include <limits.h>
+#include <float.h>
+#include <stdint.h>
+
+void print_bits(uint32_t num) {
+    for (int i = 31; i >= 0; i--) {
+        printf("%d", (num >> i) & 1);
+        if (i % 4 == 0) printf(" ");
+    }
+    printf("\n");
+}
+
+int main() {
+    printf("Name: Jaykwonn James\n");
+    printf("PID: *****\n\n");
+
+    int32_t max_signed = INT_MAX;
+    int32_t min_signed = INT_MIN;
+    printf("Max signed int: %d, Hex: 0x%X, Bits: ", max_signed, max_signed);
+    print_bits(max_signed);
+    printf("Min signed int: %d, Hex: 0x%X, Bits: ", min_signed, min_signed);
+    print_bits(min_signed);
+    printf("\n");
+
+    uint32_t max_unsigned = UINT_MAX;
+    uint32_t min_unsigned = 0;
+    printf("Max unsigned int: %u, Hex: 0x%X, Bits: ", max_unsigned, max_unsigned);
+    print_bits(max_unsigned);
+    printf("Min unsigned int: %u, Hex: 0x%X, Bits: ", min_unsigned, min_unsigned);
+    print_bits(min_unsigned);
+    printf("\n");
+
+    float max_float = FLT_MAX;
+    float min_float = FLT_MIN;
+    uint32_t max_float_bits = *(uint32_t*)&max_float;
+    uint32_t min_float_bits = *(uint32_t*)&min_float;
+    printf("Max positive float: %e, Hex: 0x%X, Bits: ", max_float, max_float_bits);
+    print_bits(max_float_bits);
+    printf("Sign: 0, Exponent: 11111110, Mantissa: ");
+    print_bits(max_float_bits & 0x7FFFFF);
+    printf("Min positive float: %e, Hex: 0x%X, Bits: ", min_float, min_float_bits);
+    print_bits(min_float_bits);
+    printf("Sign: 0, Exponent: 00000001, Mantissa: ");
+    print_bits(min_float_bits & 0x7FFFFF);
+    printf("\n");
+
+    float max_neg_float = -FLT_MAX;
+    float min_neg_float = -FLT_MIN;
+    uint32_t max_neg_float_bits = *(uint32_t*)&max_neg_float;
+    uint32_t min_neg_float_bits = *(uint32_t*)&min_neg_float;
+    printf("Max negative float: %e, Hex: 0x%X, Bits: ", max_neg_float, max_neg_float_bits);
+    print_bits(max_neg_float_bits);
+    printf("Sign: 1, Exponent: 11111110, Mantissa: ");
+    print_bits(max_neg_float_bits & 0x7FFFFF);
+    printf("Min negative float: %e, Hex: 0x%X, Bits: ", min_neg_float, min_neg_float_bits);
+    print_bits(min_neg_float_bits);
+    printf("Sign: 1, Exponent: 00000001, Mantissa: ");
+    print_bits(min_neg_float_bits & 0x7FFFFF);
+    printf("\n");
+
+    int32_t a = INT_MAX, b = 1;
+    int32_t signed_overflow = a + b;
+    printf("Signed overflow example: %d + %d = %d\n", a, b, signed_overflow);
+
+    uint32_t ua = UINT_MAX, ub = 1;
+    uint32_t unsigned_overflow = ua + ub;
+    printf("Unsigned overflow example: %u + %u = %u\n", ua, ub, unsigned_overflow);
+
+    float fa = FLT_MAX, fb = 2.0;
+    float float_overflow = fa * fb;
+    printf("Floating-point overflow example: %e * %e = %e\n", fa, fb, float_overflow);
+
+    float fc = FLT_MIN, fd = 0.5;
+    float float_underflow = fc * fd;
+    printf("Floating-point underflow example: %e * %e = %e\n", fc, fd, float_underflow);
+
+    return 0;
+}
